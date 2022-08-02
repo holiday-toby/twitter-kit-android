@@ -68,7 +68,7 @@ public class TweetComposer {
     }
 
     public String getVersion() {
-        return BuildConfig.VERSION_NAME + "." + BuildConfig.BUILD_NUMBER;
+        return  BuildConfig.BUILD_NUMBER;
     }
 
     public String getIdentifier() {

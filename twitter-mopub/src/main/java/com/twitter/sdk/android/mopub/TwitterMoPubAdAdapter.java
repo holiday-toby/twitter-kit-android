@@ -18,8 +18,6 @@
 package com.twitter.sdk.android.mopub;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Adapter;
 
@@ -71,13 +69,13 @@ public class TwitterMoPubAdAdapter extends MoPubAdAdapter{
     }
 
     @Override
-    public void loadAds(@NonNull final String adUnitId) {
+    public void loadAds( final String adUnitId) {
         loadAds(adUnitId, null);
     }
 
     @Override
-    public void loadAds(@NonNull final String adUnitId,
-            @Nullable final RequestParameters requestParams) {
+    public void loadAds( final String adUnitId,
+            final RequestParameters requestParams) {
 
         final RequestParameters.Builder builder = new RequestParameters.Builder();
         if (requestParams != null) {

@@ -1,5 +1,3 @@
-import io.fabric.gradle.weaving.ArtifactSizePlugin
-import io.fabric.gradle.weaving.DexMethodCountPlugin
 
 /*
  * Copyright (C) 2015 Twitter, Inc.
