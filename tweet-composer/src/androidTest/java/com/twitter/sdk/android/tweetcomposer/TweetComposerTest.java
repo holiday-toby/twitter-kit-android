@@ -17,6 +17,11 @@
 
 package com.twitter.sdk.android.tweetcomposer;
 
+import static org.mockito.Mockito.mock;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.test.AndroidTestCase;
 
 import com.twitter.sdk.android.core.Twitter;
@@ -25,8 +30,6 @@ import com.twitter.sdk.android.core.TwitterCoreTestUtils;
 import com.twitter.sdk.android.core.TwitterTestUtils;
 
 import java.util.concurrent.ThreadPoolExecutor;
-
-import static org.mockito.Mockito.mock;
 
 public class TweetComposerTest extends AndroidTestCase {
     private static final String TWITTER_NOT_INIT_ERROR_MSG =
@@ -50,8 +53,16 @@ public class TweetComposerTest extends AndroidTestCase {
         super.tearDown();
     }
 
+    public void testBuilder_image() {
+        final Context context = getContext();
+        final Uri uri = Uri.parse("https://upload-images.jianshu.io/upload_images/3852552-51ef93d38f9f1596.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp");
+        final TweetComposer.Builder builder = new TweetComposer.Builder(context).image(uri);
+        final Intent intent = builder.createTwitterIntent();
+        assertEquals(uri, intent.getParcelableExtra(Intent.EXTRA_STREAM));
+    }
+
     public void testGetVersion() {
-        final String version = BuildConfig.VERSION_NAME + "." + BuildConfig.BUILD_NUMBER;
+        final String version =   BuildConfig.BUILD_NUMBER;
         assertEquals(version, tweetComposer.getVersion());
     }
 

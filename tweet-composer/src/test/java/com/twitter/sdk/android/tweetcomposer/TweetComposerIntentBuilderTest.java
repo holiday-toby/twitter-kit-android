@@ -17,6 +17,16 @@
 
 package com.twitter.sdk.android.tweetcomposer;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -32,16 +42,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class TweetComposerIntentBuilderTest {
@@ -139,7 +139,7 @@ public class TweetComposerIntentBuilderTest {
     @Test
     public void testBuilder_image() {
         final Context context = createIntentContext(true);
-        final Uri uri = Uri.parse("http://www.twitter.com");
+        final Uri uri = Uri.parse("https://upload-images.jianshu.io/upload_images/3852552-51ef93d38f9f1596.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp");
         final TweetComposer.Builder builder = new TweetComposer.Builder(context).image(uri);
         final Intent intent = builder.createTwitterIntent();
         assertEquals(uri, intent.getParcelableExtra(Intent.EXTRA_STREAM));

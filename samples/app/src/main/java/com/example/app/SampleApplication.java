@@ -22,8 +22,11 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import com.squareup.leakcanary.LeakCanary;
+import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 
@@ -49,7 +52,16 @@ public class SampleApplication extends Application {
                 .penaltyLog()
                 .build());
 
-        Twitter.initialize(this);
+//        Twitter.initialize(this);
+        TwitterConfig config = new TwitterConfig.Builder(this)
+                .logger(new DefaultLogger(Log.DEBUG))
+                .twitterAuthConfig(new TwitterAuthConfig(
+                        "2xM47okwtrVPf1CNhHJ8dfy4P",
+                        "ANIcUsJ5udlF1OYF5iZ3zZ1Z49HZHn4fh13BwcIiFwC5FaSWJe"
+                ))
+                .debug(true)
+                .build();
+        Twitter.initialize(config);
 
         final HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
