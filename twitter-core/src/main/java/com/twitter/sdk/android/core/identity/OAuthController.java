@@ -110,7 +110,7 @@ class OAuthController implements OAuthWebViewClient.Listener {
                       WebChromeClient webChromeClient) {
         final WebSettings webSettings = webView.getSettings();
         webSettings.setAllowFileAccess(false);
-        webSettings.setJavaScriptEnabled(false);
+        webSettings.setJavaScriptEnabled(true);
         webSettings.setSaveFormData(false);
         webView.setVerticalScrollBarEnabled(false);
         webView.setHorizontalScrollBarEnabled(false);

@@ -88,6 +88,7 @@ public class TweetComposerMainActivity extends BaseActivity {
                 .image(uri)
                 .text("Tweet from TwitterKit!")
                 .hashtags("#twitter")
+                .darkTheme()
                 .createIntent();
         startActivity(intent);
     }

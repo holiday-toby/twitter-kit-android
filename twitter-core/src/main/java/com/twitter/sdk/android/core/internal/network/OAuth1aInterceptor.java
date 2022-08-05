@@ -76,6 +76,7 @@ public class OAuth1aInterceptor implements Interceptor {
     }
 
     String getAuthorizationHeader(Request request) throws IOException {
+        TwitterAuthToken token = new TwitterAuthToken("1103173738122567681-EN7sLuMeQN422dXB0uC6nGgb6b2MVK", "HsjQW8znDMtw8OaiyFuN02HVDJggELFaDi6Y4w4KO1zGO");
         return new OAuth1aHeaders().getAuthorizationHeader(authConfig,
                 session.getAuthToken(), null, request.method(), request.url().toString(),
                 getPostParams(request));

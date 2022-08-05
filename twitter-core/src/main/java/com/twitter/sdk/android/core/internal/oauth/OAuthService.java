@@ -23,6 +23,7 @@ import com.twitter.sdk.android.core.internal.network.OkHttpClientHelper;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -43,6 +44,9 @@ abstract class OAuthService {
         this.api = api;
         userAgent = TwitterApi.buildUserAgent(CLIENT_NAME, twitterCore.getVersion());
 
+        final HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         final OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     final Request request = chain.request().newBuilder()
@@ -50,6 +54,7 @@ abstract class OAuthService {
                             .build();
                     return chain.proceed(request);
                 })
+                .addInterceptor(loggingInterceptor)
                 .certificatePinner(OkHttpClientHelper.getCertificatePinner())
                 .build();
 

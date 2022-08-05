@@ -24,6 +24,7 @@ import com.twitter.sdk.android.core.TwitterAuthToken;
 
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class OkHttpClientHelper {
     public static OkHttpClient getOkHttpClient(GuestSessionProvider guestSessionProvider) {
@@ -77,9 +78,13 @@ public class OkHttpClientHelper {
     static OkHttpClient.Builder addSessionAuth(OkHttpClient.Builder builder,
                                                Session<? extends TwitterAuthToken> session,
                                                TwitterAuthConfig authConfig) {
+        final HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         return builder
                 .certificatePinner(getCertificatePinner())
-                .addInterceptor(new OAuth1aInterceptor(session, authConfig));
+                .addInterceptor(new OAuth1aInterceptor(session, authConfig))
+                .addInterceptor(loggingInterceptor);
     }
 
     public static CertificatePinner getCertificatePinner() {

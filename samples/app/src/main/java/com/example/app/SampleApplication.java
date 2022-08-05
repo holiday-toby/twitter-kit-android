@@ -18,7 +18,6 @@
 package com.example.app;
 
 import android.app.Application;
-import android.os.StrictMode;
 import android.util.Log;
 
 import com.squareup.leakcanary.LeakCanary;
@@ -42,15 +41,15 @@ public class SampleApplication extends Application {
         LeakCanary.install(this);
 
         Log.d(TAG, "Setting up StrictMode policy checking.");
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build());
-
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build());
+//        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//                .detectAll()
+//                .penaltyLog()
+//                .build());
+//
+//        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+//                .detectAll()
+//                .penaltyLog()
+//                .build());
 
 //        Twitter.initialize(this);
         TwitterConfig config = new TwitterConfig.Builder(this)
