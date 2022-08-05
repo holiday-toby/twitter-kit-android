@@ -17,6 +17,17 @@
 
 package com.twitter.sdk.android.core.identity;
 
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.test.AndroidTestCase;
@@ -36,17 +47,6 @@ import org.mockito.ArgumentCaptor;
 
 import java.util.concurrent.ExecutorService;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 public class TwitterLoginButtonTest extends AndroidTestCase {
 
     private static final int TEST_REQUEST_CODE = 100;
@@ -60,7 +60,9 @@ public class TwitterLoginButtonTest extends AndroidTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
+        System.setProperty(
+                "dexmaker.dexcache",
+                getContext().getCacheDir().getPath());
         mockActivity = mock(Activity.class);
         mockAuthClient = mock(TwitterAuthClient.class);
         when(mockAuthClient.getRequestCode()).thenReturn(TEST_REQUEST_CODE);
@@ -110,18 +112,18 @@ public class TwitterLoginButtonTest extends AndroidTestCase {
     }
 
     public void testConstructor_editMode() throws Exception {
-            final TwitterLoginButton button = new TwitterLoginButton(getContext()) {
-                @Override
-                protected Activity getActivity() {
-                    return mock(Activity.class);
-                }
+        final TwitterLoginButton button = new TwitterLoginButton(getContext()) {
+            @Override
+            protected Activity getActivity() {
+                return mock(Activity.class);
+            }
 
-                @Override
-                public boolean isInEditMode() {
-                    return true;
-                }
-            };
-            assertTrue(button.isEnabled());
+            @Override
+            public boolean isInEditMode() {
+                return true;
+            }
+        };
+        assertTrue(button.isEnabled());
     }
 
     public void testConstructor_twitterNotStarted() throws Exception {

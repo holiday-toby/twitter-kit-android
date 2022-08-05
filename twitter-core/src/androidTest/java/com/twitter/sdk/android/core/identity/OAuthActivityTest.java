@@ -17,10 +17,15 @@
 
 package com.twitter.sdk.android.core.identity;
 
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
+import android.test.UiThreadTest;
 
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -33,10 +38,6 @@ import org.mockito.ArgumentCaptor;
 
 import java.util.concurrent.ExecutorService;
 
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 public class OAuthActivityTest extends ActivityUnitTestCase<OAuthActivity> {
 
     private Context context;
@@ -47,9 +48,12 @@ public class OAuthActivityTest extends ActivityUnitTestCase<OAuthActivity> {
     }
 
     @Override
+    @UiThreadTest
     protected void setUp() throws Exception {
         super.setUp();
-
+        System.setProperty(
+                "dexmaker.dexcache",
+                getInstrumentation().getTargetContext().getCacheDir().getPath());
         context = getInstrumentation().getTargetContext();
         Twitter.initialize(new TwitterConfig.Builder(context)
                 .executorService(mock(ExecutorService.class))
@@ -71,6 +75,7 @@ public class OAuthActivityTest extends ActivityUnitTestCase<OAuthActivity> {
         activity.oAuthController = mockController;
     }
 
+    @UiThreadTest
     public void testOnBackPressed() {
         init();
         getActivity().onBackPressed();
@@ -83,6 +88,7 @@ public class OAuthActivityTest extends ActivityUnitTestCase<OAuthActivity> {
                 exceptionArgCaptor.getValue().getMessage());
     }
 
+    @UiThreadTest
     public void testOnComplete() {
         init();
         getActivity().onComplete(Activity.RESULT_OK, new Intent());
