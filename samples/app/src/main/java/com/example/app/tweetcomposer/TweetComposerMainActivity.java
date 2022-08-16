@@ -17,6 +17,7 @@
 
 package com.example.app.tweetcomposer;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,8 +28,12 @@ import android.widget.Button;
 
 import com.example.app.BaseActivity;
 import com.example.app.R;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
@@ -39,6 +44,37 @@ public class TweetComposerMainActivity extends BaseActivity {
     private static final String TAG = "TweetComposer";
     private static final String IMAGE_TYPES = "image/*";
     private static final int IMAGE_PICKER_CODE = 141;
+
+    private Uri uri = null;
+    private volatile TwitterAuthClient authClient;
+    private Callback<TwitterSession> callback = new Callback<TwitterSession>() {
+        @Override
+        public void success(Result<TwitterSession> result) {
+            launchComposer(uri);
+        }
+
+        @Override
+        public void failure(TwitterException exception) {
+            Log.d(TAG, exception.toString());
+        }
+    };
+
+
+    private TwitterAuthClient getTwitterAuthClient() {
+        if (authClient == null) {
+            synchronized (TweetComposerMainActivity.class) {
+                if (authClient == null) {
+                    authClient = new TwitterAuthClient();
+                }
+            }
+        }
+        return authClient;
+    }
+
+    private void startAuth() {
+        getTwitterAuthClient().authorize(this, callback);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +113,19 @@ public class TweetComposerMainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_PICKER_CODE && resultCode == Activity.RESULT_OK) {
             launchComposer(data.getData());
+        } else if (requestCode == getTwitterAuthClient().getRequestCode()) {
+            getTwitterAuthClient().onActivityResult(requestCode, resultCode, data);
         }
     }
 
     void launchComposer(Uri uri) {
+        this.uri = uri;
         final TwitterSession session = TwitterCore.getInstance().getSessionManager()
                 .getActiveSession();
+        if (session == null) {
+            startAuth();
+            return;
+        }
         final Intent intent = new ComposerActivity.Builder(TweetComposerMainActivity.this)
                 .session(session)
                 .image(uri)
